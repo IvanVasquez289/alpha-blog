@@ -1,9 +1,10 @@
 class ArticlesController < ApplicationController
+  before_action :set_article, only: [:edit, :update, :show, :destroy]
   def show
     # esto es igual a que en la consola ponga article = Article.find(3) por poner un ejemplo, pero no estara
     # disponible en mi vista show.html.erb , para ello se pone el @, para convertir mi variable normal en una 
     # variable de instancia
-    @article = Article.find(params[:id])
+    
   end
 
   def index
@@ -17,7 +18,7 @@ class ArticlesController < ApplicationController
   def edit
     # edit y update confunden algo, pero edit es de tipo get, por lo que es una vista, aqui solo renderizamos
     # segun el id que de el params, y update es tipo PUT,asi que una vez modificado un article,debe hacer render
-    @article = Article.find(params[:id])
+    
   end
   
 
@@ -25,7 +26,7 @@ class ArticlesController < ApplicationController
     # este comando renderiza en el navegador lo que cremos, pero mejor lo guardamos en una var pa la BD
     #render plain: params[:article]
     # @article = Article.new(params[:article]) tampoco es asi
-    @article = Article.new(params.require(:article).permit(:title, :description))
+    @article = Article.new(article_params)
     #render plain: @article.inspect aqui ya se ve como cuando en la consola creamos un articulo, con los demas fils vacios
     #@article.save
 
@@ -47,8 +48,8 @@ class ArticlesController < ApplicationController
   end
 
   def update
-    @article = Article.find(params[:id])
-    if @article.update(params.require(:article).permit(:title, :description))
+    
+    if @article.update(article_params)
       flash[:notice] = "El articulo fue actualizado correctamente"
       redirect_to @article
     else
@@ -58,10 +59,18 @@ class ArticlesController < ApplicationController
   end
   
   def destroy
-    @article = Article.find(params[:id])
+    
     @article.destroy
     redirect_to articles_path
   end
   
+  private
+
+  def set_article
+    @article = Article.find(params[:id])
+  end
   
+  def article_params
+    params.require(:article).permit(:title, :description)
+  end
 end

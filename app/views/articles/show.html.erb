@@ -2,3 +2,8 @@
 <%# render es un snippet para estas llaves %>
 <p><strong>Title: </strong> <%= @article.title%> </p>
 <p><strong>Description:  </strong> <%= @article.description%> </p>
+
+<%# note que funcionan sin que les pase el article como parametro %>
+<%= link_to "Editar", edit_article_path(@article) %> |
+<%= link_to "Eliminar", article_path(@article), method: :delete, data: { confirm: 'Are you sure?' } %> |
+<%= link_to "Regresar a la lista de articulos", articles_path %>
